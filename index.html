@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+<style>
+a,
+a:focus,
+a:hover {
+  color: #fff;
+}
+
+.btn-secondary {
+	background-color: #fff;
+	color: #333;
+}
+.btn-secondary:hover{
+	 background-color: #99d0f7;
+}
+.btn-secondary:focus {
+  color: #333;
+  text-shadow: none; /* Prevent inheritance from `body` */
+  background-color: #fff;
+  border: .05rem solid #fff;
+}
+.btn-secondary.active {
+  color: #fff;
+  text-shadow: none; /* Prevent inheritance from `body` */
+  background-color: #99d0f7;
+  border: .05rem solid #fff;
+}
+
+
+html,
+body {
+  height: 100%;
+  background-color: #65b5f7;
+}
+
+body {
+  display: -ms-flexbox;
+  display: flex;
+  color: #fff;
+  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+ 
+}
+
+.cover-container {
+  max-width: 42em;
+  margin-top: 4rem;
+}
+
+.masthead, .mastfoot{
+	  background-color: #3a4c5e;
+}
+
+.masthead {
+  margin-bottom: 2rem;
+}
+
+.masthead-brand {
+  margin-bottom: 0;
+  margin-right: 2rem;
+}
+
+.nav-masthead .nav-link {
+  padding: .25rem 0;
+  font-weight: 700;
+  color: rgba(255, 255, 255);
+  background-color: transparent;
+  border-bottom: .25rem solid transparent;
+}
+
+.nav-masthead .nav-link:hover,
+.nav-masthead .nav-link:focus {
+  border-bottom-color: #65b5f7;
+}
+
+.nav-masthead .nav-link + .nav-link {
+  margin-left: 1rem;
+}
+
+.nav-masthead .active {
+  color: #c0e0fc;
+  border-bottom-color: #65b5f7;
+}
+
+@media (min-width: 48em) {
+  .masthead-brand {
+    float: left;
+  }
+  .nav-masthead {
+    float: left;
+  }
+}
+
+
+.cover {
+  padding: 0 1.5rem;
+}
+.cover .btn-lg {
+  padding: .75rem 1.25rem;
+  font-weight: 700;
+}
+
+
+.mastfoot {
+  color: rgba(255, 255, 255, .5);
+}
+
+.intro{
+	margin-bottom: 6rem;
+}
+
+.main{
+
+}
+
+.image{
+	max-width: 100%;
+}
+
+#Home,#Projects,#Contact,#terms, .privacy{
+	margin-bottom:6rem;
+}
+
+.errorborder{
+	border-color: red;
+}
+
+.errortext{
+	color: red;
+}
+
+.smaller{
+	width:50%;
+}
+
+.smallertext{
+	font-size: 1rem;
+}
+
+
+
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: table;
+  transition: opacity 0.3s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  width: 300px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-header h3 {
+  margin-top: 0;
+  color: #65b5f7;
+}
+
+.modal-body {
+  margin: 20px 0;
+  color: #65b5f7;
+}
+
+.modal-default-button {
+  display: block;
+  margin-top: 1rem;
+}
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+
+
+</style>
+
+<script src="https://unpkg.com/vue@3.0.5/dist/vue.global.prod.js"></script>
+<script src="https://unpkg.com/vue-router@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body class="text-center">
+	<div id='root' class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+		<header class="navbar fixed-top masthead mb-auto justify-content-center">
+          <h3 class="masthead-brand">Broweb</h3>
+          <nav class="nav nav-masthead navbar navbar-expand-lg">
+            <headert
+            	v-for="header in headers"
+            	:title="header.title"
+            	:id="header.id"
+            	v-bind:currentpage="currentpage"
+            	@clicked="updatepagechange"
+            ></headert>
+          </nav>
+      </header>
+    <router-view></router-view> 
+      <footer class="mastfoot mt-auto navbar fixed-bottom justify-content-center">
+		<div class="row gx-5 inner justify-content-center">
+   		<footert 
+   		v-for="footer in footers"
+   		:title="footer.title"
+   		:id="footer.id"
+   		v-bind:currentpage="currentpage"
+        @clicked="updatepagechange"
+   		></footert>
+  		</div>
+	</footer>
+   	</div>
+<script>
+	
+
+
+const projectsconst= {
+  props: ['title','image','info','link'],
+  template: `
+    <div class="blog-post">
+      <h4>{{ title }}</h4>
+      <div><img v-bind:src="'images/'+image" class="image" v-if="image"></div>
+      <br>
+      <div style="white-space: pre-line;">{{ info }}</div>
+      <div v-if="link"><a target='_blank' v-bind:href="link">More information</a></div>
+      <br><br>
+    </div>
+  `
+}
+
+
+ 
+
+
+const mainpage ={
+	props: ['projects'],
+	components: { projectsconst },
+	data() {
+    return{
+    	contactsize:null,
+    	introsize:null
+	}
+		},
+	methods: {
+		handleScroll() {
+      //is contact visable
+      var el = document.getElementById('Contact');
+      //if contact 3/4 of page, than increase font
+      startincrease = window.innerHeight/4*3;
+      if ((el.offsetTop-window.scrollY)<startincrease){
+      	this.contactsize=true;
+      }else{
+      	this.contactsize=false;
+      }
+		//is intro visable
+		var el = document.getElementById('intro');	 
+      if (el.offsetTop<window.scrollY){
+      	this.introsize=true;
+      }
+      else{
+      	this.introsize=false;
+      }
+    }
+  
+},
+mounted(){
+	document.addEventListener('scroll',this.handleScroll);
+},
+	template: `
+	<div id='Home'></div>
+    <main role="main" class="container main">  
+        <div id='intro' class='intro'><h1 class="cover-heading"><a name="Home"></a>Broweb Webapplication development</h1>
+        <p class="lead" v-bind:class="{ smallertext: introsize }">Creating custom webapplication solutions</p>
+        </div>    
+        <div id="Projects">&nbsp;</div>
+        <hr>
+        <h2>Some of my Projects:</h2>
+        <br><br>
+		<projectsconst
+        	v-for="project in projects"
+        	:key="project.id"
+        	:title="project.title"
+        	:image="project.image"
+        	:info="project.info"
+        	:link="project.link"
+        ></projectsconst>
+        <br><br><br><br><br><br>
+        <hr>
+        <contact
+        	v-bind:contactsize="contactsize"
+        ></contact>
+    </main>
+    
+	`
+}
+
+
+const terms = {
+	template: `
+	<div id='terms'></div><div>Broweb Webapplication development
+Broweb Webapplication development
+Building custom webapplication solutions
+Building custom webapplication solutions
+* Project planning
+
+* 3D website
+* Cloud authentication
+* Custom ERP system
+* Web and Email server
+* SharePoint improvements
+WebRTCHTML5CSS3
+
+X
+Algemene Voorwaarden Broweb te Heel, KVK: 71424709
+Algemene Voorwaarden – Broweb
+Artikel 1 / Definities
+
+In deze Algemene Voorwaarden wordt verstaan onder:
+Algemene Voorwaarden: deze algemene voorwaarden, ongeacht de vorm waarin deze kenbaar worden gemaakt.
+Webapplicatie: Programma welke via een webbrowser kan worden benaderd, bestaande uit code en scripts, en alle andere aspecten op de betreffende webserver welke door Broweb geproduceerd of/en aangeboden worden.
+Hosting van web en email: Beheren en faciliteren van website, webapplicaties en email.
+Concept: een tussentijds voorbeeld van de Webapplicatie. Hier kunnen geen rechten aan worden ontleend.
+Content: de gehele inhoud van de Website, waaronder doch niet uitsluitend teksten, afbeeldingen en video’s.
+Contractant: de wederpartij met wie Broweb een Overeenkomst heeft gesloten.
+Dienst: alle werkzaamheden die voorwerp zijn van de Overeenkomst of een andere rechtshandeling in de relatie tussen Broweb en Contractant (waaronder mede, doch niet uitsluitend, begrepen diensten met betrekking tot het ontwikkelen van de Webapplicatie en hosting van web en email), en ook alle daarbij voortgebrachte materialen en resultaten die bestemd zijn voor Contractant.
+Intellectuele Eigendomsrechten: alle rechten van intellectuele eigendom en daarmee verwante rechten, zoals auteursrecht, merkrecht, octrooirecht, modelrecht, handelsnaamrecht, databankrecht en naburige rechten, alsmede rechten op knowhow.
+Onderhoudscontract: het onderhoudscontract, ookwel servicecontract genoemd, aangeboden bij iedere nieuwe losstaande webapplicatie. Dit is een abbonnementsdienst.
+Overeenkomst: de overeenkomst tussen Contractant en Broweb op grond waarvan Broweb Diensten aan Contractant levert.
+Vertegenwoordiger: degene die bevoegd is om in naam van Contractant een Overeenkomst aan te gaan.
+Artikel 2 / Algemeen
+2.1 Deze Algemene Voorwaarden zijn van toepassing op alle offertes en Overeenkomsten, betreffende levering door Broweb van Diensten aan of ten behoeve van Contractant, ongeacht of deze mondeling, schriftelijk, elektronisch of in enige andere vorm zijn gedaan of tot stand zijn gekomen.
+2.2 In verband met de specifieke aard van het bepaalde in de Overeenkomst, kan in de Overeenkomst worden afgeweken van hetgeen bepaald in deze Algemene Voorwaarden. De bepalingen uit de Overeenkomst gaan voor de bepalingen uit de Algemene Voorwaarden.
+2.3 Indien een der bepalingen van deze Algemene Voorwaarden nietig is of wordt vernietigd, zullen de overige bepalingen van deze Algemene Voorwaarden volledig van kracht blijven.
+2.4 Indien deze Algemene Voorwaarden eenmaal van toepassing zijn geweest op een rechtsverhouding tussen Broweb en Contractant, wordt Contractant geacht bij Algemene Voorwaarden Broweb te Heel, KVK: 71424709 voorbaat te hebben ingestemd met de toepasselijkheid van de Algemene Voorwaarden op nadien gesloten en te sluiten Overeenkomsten.
+2.5 Afwijkingen van de Algemene Voorwaarden zijn slechts geldig indien deze uitdrukkelijk schriftelijk door Broweb en de Contractant zijn overeengekomen.
+2.6 Broweb wijst uitdrukkelijk de toepasselijkheid van eventuele algemene (inkoop)voorwaarden van Contractant van de hand.
+2.7 Broweb is gerechtigd de Algemene Voorwaarden te wijzigen. De wijziging zal via de website van Broweb of op een andere wijze aan Contractant bekend worden gemaakt. Indien Contractant de wijziging niet wenst te accepteren is Contractant gerechtigd de Overeenkomst, binnen 14 dagen na de bekendmaking, schriftelijk op te zeggen per de datum waarop de wijziging in zal gaan.
+2.8 Alle acties zijn, tenzij uitdrukkelijk anders vermeld, zo lang de voorraad strekt, niet geldig in combinatie met andere acties en maximaal 1 per klant. De klant is hier het bedrijf, niet de contactpersoon.
+Artikel 3 / Totstandkoming van de Overeenkomst
+3.1 Alle aanbiedingen en offertes van Broweb zijn vrijblijvend, tenzij nadrukkelijk schriftelijk anders is vermeld.
+3.2 Alle door Contractant geplaatste opdrachten, schriftelijk danwel verbaal, zijn bindend en kunnen niet door Contractant worden herroepen. Een Overeenkomst komt tot stand doordat een opdracht van Contractant door Broweb wordt aanvaard danwel, afhankelijk van hetgeen eerder is, doordat Broweb uitvoering geeft aan de Overeenkomst. Broweb is te allen tijde gerechtigd een opdracht te weigeren, bijvoorbeeld indien de inhoud van de Website inbreuk maakt op rechten van derden, onrechtmatig, onwelvoeglijk of niet lief voor dieren is.
+3.3 Vertegenwoordiger en Contractant staan er voor in dat Vertegenwoordiger volledig bevoegd is om Contractant bij de totstandkoming van de Overeenkomst te vertegenwoordigen.
+Artikel 4 / Uitvoering dienstverlening
+4.1 Voor de duur en op basis van de Overeenkomst biedt Broweb de Contractant dienstverlening met betrekking tot, mede doch niet uitsluitend, het ontwikkelen van een Website, zoals is overeengekomen in de offerte.
+4.2 Broweb zal zich inspannen om de Website binnen de overeengekomen termijn en conform de overeengekomen specificaties te leveren. Alle opgegeven termijnen dienen echter slechts als richtlijn en zijn dus nimmer fataal, tenzij uitdrukkelijk schriftelijk anders is overeengekomen.
+4.3 Broweb zal zich inspannen de Dienst conform de overeengekomen specificaties te leveren, met uitsluiting van eventuele uitdrukkelijke of stilzwijgende garanties, toezeggingen of vrijwaringen van welke aard dan ook, met inbegrip van (doch niet beperkt tot) de uitsluiting van garanties terzake van gerechtigdheid tot (eigendoms) rechten, voldoende kwaliteit of geschiktheid voor een bepaald doel. Met name garandeert Broweb niet:
+- dat de Website ononderbroken zal werken, vrij zal zijn van virussen en fouten en/of gebreken, en dat gebreken kunnen worden verholpen;
+- dat derden niet de voor de Dienst benodigde systemen onrechtmatig (zullen) gebruiken.
+4.4 Broweb is gerechtigd de Website (tijdelijk) buiten gebruik te stellen of te beperken bijvoorbeeld voor het onderhouden of aanpassen van de Website, zonder dat hierdoor enig recht van Contractant op schadevergoeding jegens Broweb ontstaat.
+4.5 Broweb is gerechtigd de Website te verbeteren en steeds aan te passen aan de actuele stand van de techniek en de ontwikkelingen in de markt, zonder dat Contractant enig recht op schadevergoeding of ontbinding toekomt.
+4.6 Broweb is gerechtigd voor de uitvoering van de Dienst gebruik te maken van diensten van derden. Broweb is bovendien gerechtigd haar rechten en verplichtingen uit de Overeenkomst in het kader van een overdracht van haar onderneming, over te dragen aan een derde.
+4.7 Indien naar het oordeel van Broweb uitvoering van de Overeenkomst extra werkzaamheden met zich meebrengt, dan wel indien Contractant, of eventuele derden in opdracht van Contractant, extra werkzaamheden vraagt of veroorzaakt (bijvoorbeeld doordat Contractant onvolledige/onjuiste informatie verstrekt), is Broweb gerechtigd alle extra bestede tijd en kosten, in voorkomende gevallen ook die van derden, aan Contractant in rekening te brengen.
+Artikel 5 / Webapplicatie en Onderhoudscontract
+5.1 De Webapplicatie moet voldoen aan de overeengekomen (technische) eisen. Broweb heeft het recht deze eisen tijdens de duur van de Overeenkomst te wijzigen. Broweb zal Contractant van een dergelijke wijziging op de hoogte stellen.
+5.2 Broweb is gerechtigd, doch niet verplicht, de Contractant te verzoeken de uitvoering van de Overeenkomst te controleren, bijvoorbeeld door een voorbeeld van de Webapplicatie, in de vorm van een Concept, te sturen. Indien Broweb, ter voorbeeld, aan Contractant een Concept stuurt, kan Contractant tweemaal wijzigingen met betrekking op het design en de content doorgeven, welke Broweb zonder extra kosten door zal voeren. Dit is alleen mogelijk voor zover deze wijzigingen betrekking hebben op feitelijke onjuistheden in de content van de Webapplicatie en/of indien gegevens in het Concept niet overeenkomen met de wensen die staan vermeld in de Overeenkomst. Indien Contractant na deze twee aanpassingsrondes een Website wil wijzigingen is Broweb gerechtigd hiervoor haar standaard tarieven in rekening te brengen á €80,- per uur. Broweb kan er niet voor instaan dat alle wijzigingen daadwerkelijk kunnen worden doorgevoerd.
+5.4 De uitvoering van de Overeenkomst is automatisch door Contractant goedgekeurd, indien hij noch binnen 14 dagen na de aanvang van de uitvoering daarvan, noch binnen 14 dagen na de ontvangst van een controle verzoek van Broweb (afhankelijk van hetgeen eerder is) schriftelijk anderszins te kennen geeft.
+5.5 Contractant kan geen rechten ontlenen aan de positie van de Website op online zoekmachines zoals Google.
+5.6 Broweb garandeert niet dat een Website te allen tijde voldoet aan de overeengekomen specificaties of posities of zoeklogica van online zoekmachines.
+Contractant is ermee bekend en akkoord dat (elektronische) media tussentijds kunnen wijzigen en dat als gevolg daarvan veranderingen kunnen optreden in de positie die de Website in online zoekmachines heeft of had.
+5.7 Contractant is ermee akkoord dat Websites van derden, waaronder concurrenten, in de buurt van de Website van Contractant verschijnen in internet zoekmachines. Contractant is er bovendien mee akkoord dat Websites van derden, waaronder concurrenten, verschijnen bij het gebruik van zoekwoord(en) waarvan een met de handelsnaam of merk van Contractant overeenstemmend teken onderdeel uit maakt.
+5.8 Broweb is gerechtigd de Website te gebruiken voor plaatsing in andere media van Broweb, van rechtspersonen waarmee Broweb is gelieerd of van partners van Broweb, tenzij schriftelijk uitdrukkelijk anders is overeengekomen.
+Contractant kan aan deze plaatsing in andere media geen rechten ontlenen.
+Artikel 6 / Medewerking door Contractant
+6.1 Contractant zal, voor zover zulks redelijkerwijs noodzakelijk is, zijn medewerking verlenen aan het uitvoeren van de Overeenkomst. Contractant zal onder meer tijdig alle voor de levering van de Diensten benodigde gegevens op de overeengekomen wijze verstrekken.
+Hieronder wordt mede, doch niet uitsluitend, verstaan, alle gegevens en informatie met betrekking tot (de inhoud van) de Website.
+6.2 Contractant staat ervoor in dat de in 6.1 bedoelde gegevens juist en volledig zijn en garandeert dat zijn gebruik van de Diensten overeenstemt met de overeengekomen doeleinden, niet in strijd is met de in Nederland geldende wetgeving en regelgeving, geen inbreuk maakt op (intellectuele eigendoms) rechten van derden danwel anderszins niet onrechtmatig is. Contractant zal zich onthouden van ieder handelen, in de ruimste zin des woords, dat de reputatie van Broweb, waaronder eveneens begrepen haar Diensten, zou kunnen aantasten. Contractant vrijwaart Broweb volledig tegen eventuele aanspraken en vorderingen tot schadevergoeding van derden ter zake, en vrijwaart Broweb eveneens voor alle door haar in verband met deze aanspraken en vorderingen gemaakte kosten.
+6.3 Contractant is niet gerechtigd haar rechten of verplichtingen uit de Overeenkomst over te dragen aan derden of aan derden in gebruik te geven, tenzij Broweb hiervoor uitdrukkelijk schriftelijk toestemming heeft verleend.
+6.4 Contractant zal zich houden aan alle door Broweb verstrekte of op de website van Broweb bekendgemaakte richtlijnen inzake het gebruik van de Dienst.
+6.5 Contractant is niet toegestaan en zal derden niet toestaan om op frauduleuze wijze de Dienst te gebruiken
+6.6 Indien Contractant in het kader van de dienstverlening een gebruiksnaam en wachtwoord van Broweb ontvangt, dient Contractant deze zorgvuldig te gebruiken en te bewaren. In het geval misbruik of diefstal van gebruiksnaam en wachtwoord wordt vermoed, dient Contractant Broweb direct op de hoogte te stellen, zodat Broweb de toegang tot de Dienst van Contractant kan opheffen of andere passende maatregelen kan nemen. Contractant is aansprakelijk voor al het gebruik van de Dienst via gebruiksnaam en wachtwoord. Broweb kan uitdrukkelijk niet aansprakelijk worden gesteld voor verliezen die het gevolg zijn van misbruik of diefstal van gebruiksnaam en wachtwoord.
+Artikel 7 / Aanvullende bepalingen voor Overeenkomsten ten behoeve van derden
+7.1 Indien Contractant ten behoeve van een derde partij met Broweb een Overeenkomst aangaat, zijn de in dit artikel opgenomen aanvullende bepalingen eveneens van toepassing.
+7.2 Contractant garandeert dat de derde partij akkoord is met het online plaatsen van de Website zoals tussen Contractant en Broweb overeengekomen.
+7.3 Broweb is te allen tijde gerechtigd aanvullende voorwaarden met betrekking tot de aanvaarding van de Overeenkomst en de eventuele Website te stellen.
+7.4 Broweb is te allen tijde gerechtigd contact op te nemen met de derde partij. Indien om wat voor reden dan ook aan Broweb blijkt dat de derde partij bezwaar maakt tegen de Website c.q. het online plaatsen daarvan, is Broweb gerechtigd de uitvoering van de Overeenkomst op te schorten.
+7.5 Niettegenstaande het vorige lid is Contractant jegens Broweb volledig aansprakelijk voor de in verband met het online plaatsen van de Website aan Broweb verschuldigde vergoeding.
+7.6 Contractant vrijwaart Broweb volledig tegen eventuele aanspraken en vorderingen tot schadevergoeding van de derde partij ten behoeve van wie hij de Overeenkomst aangaat en vrijwaart Broweb eveneens voor alle door haar in verband met deze aanspraken en vorderingen gemaakte kosten.
+Artikel 8 / Vergoeding en betaling
+8.1 Contractant is aan Broweb de vergoedingen verschuldigd welke zijn overeengekomen in de Overeenkomst. Alle aan Broweb verschuldigde vergoedingen zijn, voor zover niet uitdrukkelijk anders vermeld, gesteld in euro, exclusief BTW en overige heffingen.
+8.2 De vergoedingen kunnen bestaan uit eenmalig verschuldigde bedragen, jaarlijks of anderszins periodiek verschuldigde bedragen en bedragen die afhankelijk zijn van het gebruik van de Dienst of de Website.
+8.3 Broweb is gerechtigd de vergoedingen gedurende de looptijd van de Overeenkomst te verhogen. Indien de verhoging van de totale waarde van de Overeenkomst 10% of meer bedraagt, terwijl de inhoud van de Overeenkomst verder niet verandert, en Contractant niet akkoord wenst te gaan met deze verhoging, heeft hij het recht binnen 14 dagen na de aankondiging van de verhoging de Overeenkomst gedeeltelijk schriftelijk op te zeggen tegen de datum waarop de verhoging ingaat. Dit recht tot opzegging geldt niet indien de verhoging minder dan 10% bedraagt.
+8.4 Broweb is te allen tijde gerechtigd om een vooruitbetaling van de vergoedingen te verzoeken.
+8.5 Broweb brengt de door Contractant verschuldigde bedragen telkens door middel van een factuur in rekening. Voor de vaststelling van de hoogte van de factuur zijn de gegevens uit de administratie van Broweb leidend.
+8.6 Betaling dient te geschieden op de door Broweb aangegeven wijze. Tenzij schriftelijk uitdrukkelijk een andere betalingstermijn is overeengekomen, dient betaling van het gehele factuurbedrag te geschieden binnen 14 dagen na factuurdatum.
+8.7 Enig beroep door Contractant op opschorting, verrekening of aftrek is niet toegestaan.
+8.8 Indien Contractant de factuur niet binnen de betalingstermijn heeft voldaan, is Contractant zonder nadere ingebrekestelling in verzuim. Vanaf de datum van verzuim, is Contractant over het openstaande bedrag een rentevergoeding verschuldigd ter hoogte van 1% per maand, tenzij de wettelijke handelsrente op maandbasis hoger is dan 1% per maand in welk geval de wettelijke handelsrente verschuldigd is, tot aan de datum der algehele voldoening. Bij de berekening van de rentevergoeding wordt een gedeelte van een maand als gehele maand gerekend.
+8.9 Vanaf de datum van verzuim is Contractant naast betaling van de hoofdsom en daarover verschuldigde rente gehouden tot de vergoeding van alle buitengerechtelijke, en eventueel gerechtelijke, kosten, uitdrukkelijk naast de eventueel in rechte vastgestelde kosten. De hoogte van de buitengerechtelijke kosten bedraagt minimaal 15% van de hoofdsom, met een minimum bedrag van € 50,- (vijftig euro).
+8.10 Broweb is gerechtigd de kredietwaardigheid van Contractant te onderzoeken.
+Indien wenselijk dient Contractant, op eerste verzoek van Broweb, voldoende zekerheid te stellen voor de nakoming van bestaande en toekomstige verplichtingen jegens Broweb. Broweb is in zodanig geval gerechtigd de Dienst, of een gedeelte daarvan, pas te leveren nadat gewenste zekerheid is verkregen.
+Artikel 9 / Intellectuele Eigendomsrechten
+9.1 De Intellectuele Eigendomsrechten op alle Diensten die Broweb in het kader van de Overeenkomst ter beschikking stelt, blijven berusten bij Broweb of bij de derde van wie Broweb het recht heeft verkregen om (een onderdeel van) deze Diensten aan Contractant ter beschikking te stellen. Gedurende de Overeenkomst verleent Broweb aan Contractant een niet-exclusief en niet-overdraagbaar recht de Dienst binnen zijn eigen onderneming en voor de overeengekomen doelstellingen te gebruiken.
+9.2 De Intellectuele Eigendomsrechten op al het materiaal dat Contractant in het kader van de Overeenkomst aan Broweb ter beschikking stelt, blijft berusten bij Contractant of bij de derde van wie Contractant het recht heeft verkregen het materiaal aan Broweb ter beschikking te stellen. Contractant verleent Broweb het recht deze materialen ten behoeve van de uitvoering van de Overeenkomst te gebruiken.
+9.3 Contractant staat ervoor in dat de door hem ter beschikking gestelde materialen geen inbreuk maken op rechten van derden en dat hij gerechtigd is deze materialen aan Broweb ter beschikking te stellen. Contractant vrijwaart Broweb volledig tegen eventuele aanspraken en vorderingen tot schadevergoeding van derden ter zake, en vrijwaart Broweb eveneens voor alle door haar in verband met deze aanspraken en vorderingen gemaakte kosten.
+9.4 Contractant mag aanduidingen van rechthebbenden met betrekking tot Intellectuele Eigendomsrechten niet verwijderen. Hetzelfde geldt voor mededelingen dat bepaalde informatie van vertrouwelijke aard is.
+Artikel 10 / Privacy en Geheimhouding
+10.1 Om de Dienst te kunnen aanbieden dient Broweb persoonsgegevens te verzamelen. De persoonsgegevens worden opgenomen in een bestand. Broweb draagt er zorg voor dat de verzameling van persoonsgegevens enkel intern beschikbaar is.
+Deze informatie zal niet met derden worden gedeeld.
+10.2 Partijen verplichten zich tot geheimhouding van alle van de andere partij ontvangen gegevens waarvan men weet of dient te weten dat deze van vertrouwelijke aard zijn, tenzij een wettelijke plicht openbaarmaking van die gegevens gebiedt. De partij die vertrouwelijke gegevens ontvangt, zal deze slechts gebruiken voor het doel waarvoor deze zijn verstrekt.
+10.3 Partijen leggen de in 10.2 genoemde verplichting tevens op aan hun werknemers alsmede aan door hen, ter uitvoering van de Overeenkomst, ingeschakelde derden.
+Artikel 11 / Aansprakelijkheid
+11.1 Broweb is niet aansprakelijk voor schade geleden door Contractant, tenzij deze schade is veroorzaakt door opzet of grove schuld van Broweb in welk geval Broweb uitsluitend aansprakelijk is voor de directe schade.
+11.2 De totale aansprakelijkheid van Broweb bedraagt nooit meer dan het totaal van de voor de betreffende Dienst bedongen vergoeding. Indien er sprake is van een Overeenkomst met een looptijd van meer dan één jaar, dan wordt de bedongen vergoeding vastgesteld op het totaal van vergoedingen bedongen voor het, op het moment dat de tekortkoming zich voordoet, lopende jaar. In geen geval zal de totale vergoeding meer bedragen dan Euro 100,- per gebeurtenis, waarbij een reeks van gebeurtenissen als één gebeurtenis wordt beschouwd.
+11.3 Onder directe schade wordt uitsluitend verstaan:
+- de kosten die de Contractant redelijkerwijs heeft moeten maken om de tekortkoming van Broweb te herstellen of op te heffen, zodat de prestatie van Broweb wel aan de overeenkomst beantwoordt;
+- redelijke kosten voor het langer operationeel houden van het oude systeem van de Contractant, verminderd met de besparingen;
+- redelijke kosten ter voorkoming of beperking van zulke schade en redelijke kosten ter vaststelling van de oorzaak en omvang daarvan.
+11.4 Iedere aansprakelijkheid van Broweb voor indirecte schade, waaronder begrepen maar niet beperkt tot gevolgschade, winstderving en omzetderving, is uitgesloten.
+11.5 Broweb is niet aansprakelijk voor schade aan de zijde van Contractant die is veroorzaakt door derden, die al of niet gebruik maken van de Dienst.
+Artikel 12 / Opschorting
+12.1 Broweb is gerechtigd de uitvoering van de Overeenkomst, geheel of gedeeltelijk, op te schorten indien Contractant te kort schiet in de nakoming van zijn verplichtingen uit de Overeenkomst, danwel indien Broweb het vermoeden heeft dat Contractant in strijd handelt met 6, 9.3 of 9.4, of gegronde vrees heeft dat Contractant niet kan voldoen aan zijn betalingsverplichting, onverminderd enig ander aan Broweb toekomend recht. Opschorting ontslaat Contractant nimmer van enige betalingsverplichting terzake van reeds door Broweb geleverde Diensten. Onder het te kort schieten in nakoming van de Overeenkomst door de Contractant valt ook het niet binnen redelijke termijn reageren op contactverzoeken, zoals email berichten, dat ervoor zorgt dat Broweb de Dienst niet (binnen redelijke termijn) kan uitvoeren.
+12.2 Zodra Contractant alsnog de Overeenkomst nakomt en/of voldoende zekerheid stelt ter voldoening van zijn verplichtingen, zal Broweb de opschorting opheffen.
+Artikel 13 / Duur van de Overeenkomst
+13.1 Tenzij uitdrukkelijk anders overeengekomen, hebben alle Overeenkomsten voor het onderhoudscontract of servicecontract een initiële looptijd van 1 jaar. Daarna wordt de Overeenkomst steeds stilzwijgend verlengd voor een termijn van 1 maand, tenzij de Overeenkomst door één der partijen schriftelijk wordt opgezegd.
+13.2 Onverminderd alle overige rechten, zijn Partijen gerechtigd de Overeenkomst zonder rechterlijke tussenkomst en zonder ingebrekestelling geheel of gedeeltelijk met onmiddellijke ingang te ontbinden indien de andere partij:
+- surseance van betaling heeft aangevraagd of dit aan deze is verleend;
+- in staat van faillissement is verklaard of een faillissementsaanvraag is ingediend.
+13.3 Onverminderd haar overige rechten, is Broweb gerechtigd de Overeenkomst met onmiddellijke ingang te ontbinden, indien Contractant niet voldoet aan haar verplichtingen uit 6, 9.3 of 9.4.
+13.4 Opzegging of ontbinding van de Overeenkomst ontslaat Contractant nimmer van enige betalingsverplichting terzake van reeds door Broweb geleverde Diensten.
+Bedragen die Broweb voor de beëindiging heeft gefactureerd in verband met hetgeen zij reeds ter uitvoering van de Overeenkomst heeft verricht of geleverd, worden op het moment van de beëindiging direct opeisbaar.
+13.5 Direct na beëindiging van de Overeenkomst retourneert Contractant al hetgeen Broweb in het kader van de Overeenkomst aan Contractant ter beschikking heeft gesteld.
+13.6 De bepalingen die naar hun aard bestemd zijn om beëindiging van de Overeenkomst te overleven, blijven ook na zulke beëindiging onverminderd van kracht.
+Artikel 14 / Slotbepalingen
+14.1 Op de Overeenkomst is Nederlands recht van toepassing.
+14.2 Alle geschillen welke mochten voortvloeien uit de Overeenkomst zullen worden voorgelegd aan de bevoegde rechter te Roermond.
+BROWEB is ingeschreven bij de Kamer van Koophandel te Roermond onder nr. 71424709.</div>
+<br><br><br><br><br>
+	`
+}
+
+const privacy = {
+	template: `
+	<div class='privacy'></div><div style="white-space: pre-line;">Broweb Webapplication development Privacy Policy.<br>Broweb hecht veel waarde aan de bescherming van uw persoonsgegevens. In deze Privacy policy willen we heldere en transparante informatie geven over hoe wij omgaan met persoonsgegevens.
+Wij doen er alles aan om uw privacy te waarborgen en gaan daarom zorgvuldig om met persoonsgegevens. Broweb houdt zich in alle gevallen aan de toepasselijke wet- en regelgeving, waaronder de Algemene Verordening Gegevensbescherming. Dit brengt met zich mee dat wij in ieder geval:
+- Uw persoonsgegevens verwerken in overeenstemming met het doel waarvoor deze zijn verstrekt, deze doelen en type persoonsgegevens zijn beschreven in dit Privacy policy;
+- Verwerking van uw persoonsgegevens beperkt is tot enkel die gegevens welke minimaal nodig zijn voor de doeleinden waarvoor ze worden verwerkt;
+- Vragen om uw uitdrukkelijke toestemming als wij deze nodig hebben voor de verwerking van uw persoonsgegevens;
+- Passende technische en organisatorische maatregelen hebben genomen zodat de beveiliging van uw persoonsgegevens gewaarborgd is;
+- Geen persoonsgegevens doorgeven aan andere partijen, tenzij dit nodig is voor uitvoering van de doeleinden waarvoor ze zijn verstrekt;
+- Op de hoogte zijn van uw rechten omtrent uw persoonsgegevens, u hierop willen wijzen en deze respecteren.
+Als Broweb zijn wij verantwoordelijk voor de verwerking van uw persoonsgegevens. Indien u na het doornemen van ons Privacy policy, of in algemenere zin, vragen heeft hierover of contact met ons wenst op te nemen kan dit via de contactgegevens onder aan dit document.
+
+Verwerking van persoonsgegevens van Klanten of leveranciers
+Persoonsgegevens van klanten of leveranciers worden door Broweb verwerkt ten behoeve van de volgende doelstelling(en):
+- Administratieve doeleinde;
+- Communicatie over de opdracht en/of uitnodigingen;
+- Het uitvoering geven aan of het uitgeven van een opdracht.
+Grondslag voor deze persoonsgegevens is:
+- De overeengekomen opdracht;
+Voor de bovenstaande doelstelling(en) kan Broweb de volgende persoonsgegevens van u vragen:
+- Voornaam Achternaam
+Geboortedatum
+Volledig adres
+Tel nummer
+Email
+Bankrekeningnummer
+IP-adres
+MAC-adres
+Browser type
+Tijdstippen useractiviteit
+Uw persoonsgegevens worden door Broweb opgeslagen ten behoeve van bovengenoemde verwerking(en) voor de periode:
+- Gedurende de looptijd van de overeenkomst en daarna alleen in de financiële administratie voor minimaal 7 jaar.
+
+Verwerking van persoonsgegevens van prospect, stakeholder-/lobbycontacten en/of geïnteresseerde
+Persoonsgegevens van prospect, stakeholder-/lobbycontacten en/of geïnteresseerde worden door Broweb verwerkt ten behoeve van de volgende doelstelling(en):
+- Informatieverstrekking in de vorm van nieuwsbrieven en/of gerichte contacten.
+Grondslag voor deze persoonsgegevens is:
+- Mondelinge toestemming, afgifte visitekaartje en/of via koppeling op LinkedIn;
+Voor de bovenstaande doelstelling(en) kan Broweb de volgende persoonsgegevens van u vragen:
+- Naam;
+- Adresgegevens;
+- Telefoonnummer;
+- E-mailadres.
+Uw persoonsgegevens worden door Broweb opgeslagen ten behoeve van bovengenoemde verwerking(en) voor de periode:
+- Gedurende de periode dat men gezien wordt als een prospect, stakeholder-/lobbycontacten en/of geïnteresseerde.
+
+Verstrekking aan derden
+De gegevens die u aan ons geeft kunnen wij aan derde partijen verstrekken indien dit noodzakelijk is voor uitvoering van de hierboven beschreven doeleinden.
+Zo maken wij gebruik van een derde partij voor:
+- Werving geïnteresseerde
+Wij geven nooit persoonsgegevens door aan andere partijen waarmee we geen verwerkersovereenkomst hebben afgesloten. Met deze partijen (verwerkers) maken wij hierin uiteraard de nodige afspraken om de beveiliging van uw persoonsgegevens te waarborgen. Verder zullen wij de door uw verstrekte gegevens niet aan andere partijen verstrekken, tenzij dit wettelijk verplicht en toegestaan is. Een voorbeeld hiervan is dat de politie in het kader van een onderzoek (persoons)gegevens bij ons opvraagt. In een dergelijk geval dienen wij medewerking te verlenen en zijn dan ook verplicht deze gegevens af te geven. Tevens kunnen wij persoonsgegevens delen met derden indien u ons hier schriftelijk toestemming voor geeft.
+Binnen de EU
+Wij verstrekken geen persoonsgegevens aan partijen welke gevestigd zijn buiten de EU.
+Minderjarigen
+Wij verwerken enkel en alleen persoonsgegevens van minderjarigen (personen jongen dan 16 jaar) indien daarvoor schriftelijke toestemming is gegeven door de ouder, verzorger of wettelijke vertegenwoordiger.
+Bewaartermijn
+Broweb bewaart persoonsgegevens niet langer dan noodzakelijk voor het doel waarvoor deze zijn verstrekt dan wel op grond van de wet is vereist.
+Beveiliging
+Wij hebben passende technische en organisatorische maatregelen genomen om persoonsgegevens van u te beschermen tegen onrechtmatige verwerking, zo hebben we bijvoorbeeld de volgende maatregelen genomen;
+- Alle personen die namens Broweb van uw gegevens kennis kunnen nemen, zijn gehouden aan geheimhouding daarvan.
+- Wij maken back-ups van de persoonsgegevens om deze te kunnen herstellen bij fysieke of technische incidenten;
+
+- We testen en evalueren regelmatig onze maatregelen;
+- Onze medewerkers zijn geïnformeerd over het belang van de bescherming van persoonsgegevens.
+Technische details beveiliging
+DNSSEC STARTTLS en DANE
+Alleen TLS1.0, 1.1 en 1.2 connectie toegestaan met veilig SSL certificaat.
+X-Frame-Options SAMEORIGIN
+X-Content-Type nosniff
+X-XSS-Protection 1; mode=block
+Referrer-Policy: no-referrer
+DMARC quarantine
+DKIM
+SPF policy
+Sterk Root wachtwoord
+Sterk mysql user wachtwoord
+Authenticatie via Cloud providers
+Firewall beveiliging voor webserver
+Fysieke toegangsbeveiliging
+
+Rechten omtrent uw gegevens
+U heeft recht op inzage, rectificatie of verwijdering van de persoonsgegeven welke wij van u ontvangen hebben. Tevens kunt u bezwaar maken tegen de verwerking van uw persoonsgegevens (of een deel hiervan) door ons of door één van onze verwerkers. Ook heeft u het recht om de door u verstrekte gegevens door ons te laten overdragen aan uzelf of in opdracht van u direct aan een andere partij. Wij kunnen u vragen om u te legitimeren voordat wij gehoor kunnen geven aan voornoemde verzoeken.
+
+Mogen wij uw persoonsgegevens verwerken op basis van een door u gegeven toestemming hiertoe, dan heeft u altijd het recht deze toestemming in te trekken.
+Klachten
+Mocht u een klacht hebben over de verwerking van uw persoonsgegevens dan vragen wij u hierover direct contact met ons op te nemen. Komen wij er samen met u niet uit dan vinden wij dit natuurlijk erg vervelend. U heeft altijd het recht een klacht in te dienen bij de Autoriteit Persoonsgegevens, dit is de toezichthoudende autoriteit op het gebied van privacybescherming.
+Vragen
+Als u naar aanleiding van ons Privacy Statement nog vragen of opmerkingen heeft neem dan contact met ons op!
+Contactgegevens
+Broweb
+info@broweb.nl</div>
+<div class='privacy'>&nbsp;</div><br><br><br><br>	`
+}
+
+
+
+const app = Vue.createApp({
+	methods:{
+		updatepagechange(id){
+			this.currentpage = id;
+		}
+
+	},
+	
+	 components: {'projects': projectsconst, 'mainpage': mainpage},
+  data() {
+    return {
+      currentpage: 1,
+      footers: [
+      	{ id: 4, title: 'Terms and conditions'},
+      	{ id: 5, title: 'Privacy policy'}
+      ],
+      headers: [
+      	{ id:1, title: 'Home'},
+      	{ id:2, title: 'Projects'},
+      	{ id:3, title: 'Contact'},
+      ]
+    }
+  }
+})
+
+
+
+const projects =  [
+		{ id: 1, title: 'Broweb website', image: 'broweb.png',  info: "Created with Vue.js and Bootstrap.\n Router engine and dynamic event processing."},
+        { id: 2, title: 'Project planning', image: 'planning.png', info: "Custom week project planning.\n Direct edit, Direct calculation, Full mobile version!\n Up until 6 deadlines for each member of a project.\n Register leave, sickness, study or other non work hours.\n Authentication by Cloud providers.\n Created with jQuery Mobile."},
+        { id: 3, title: 'Small business ERP', image: 'erp.png', info: "Customer relatations, Planning, Resource maintenance and Billing in 1 webapplication.\n Full mobile version!\n Created with jQuery mobile."},
+        { id: 4, title: 'Sharepoint improvements: Mail2Merge', image: 'mail2merge.jpg', info: "Attach documents from SharePoint directly to your emails.\nChromium browser extension\n Created with jQuery.", link: 'https://www.broweb.nl/mail2merge'},
+        { id: 5, title: '3D website: Broelie.nl', image: 'broelie.png', info: "Created with Three.js", link: 'https://www.broelie.nl'}
+      ]
+
+app.component('contact', {
+	props: [
+		'contactsize'
+	],
+	components: {},
+	data() {
+    return {
+      showModal: false,
+      firstname: '',
+      lastname: '',
+      email: '',
+      message: '',
+      firstnameerror: null,
+      lastnameerror: null,
+      emailerror: null,
+      messageerror: null,
+      messagesend: false
+    }
+  },
+	methods: {
+		sendmessage: function(event) {
+			//console.log(event)
+			//console.log(this.firstname)
+			this.firstnameerror= null
+		    this.lastnameerror= null
+		    this.emailerror= null
+		    this.messageerror= null
+		    function validateEmail(value){
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value))
+    {
+      return false // emailaddress OK
+    } else{
+      return true //emailaddress not OK
+    } 
+      }
+    
+
+			if (this.firstname.length <3 || this.lastname.length<3 || this.email<6 || this.message<10 || validateEmail(this.email)){
+				console.log('error');
+				if (this.lastname.length <3){
+					this.lastnameerror = true
+				}
+				if (this.email.length <6 || validateEmail(this.email)){
+					this.emailerror = true
+				}
+				if (this.message.length <10){
+					this.messageerror = true
+				}
+				if (this.firstname.length <3){
+					this.firstnameerror = true
+				}
+			}else{
+			axios.post('sendmessage.php', {
+			    firstName: this.firstname,
+			    lastName: this.lastname,
+			    email: this.email,
+			    message: this.message
+			  })
+			.then(response => {this.showModal = true;this.messagesend = true;})
+			  .catch(function (error) {
+			    console.log(error);
+			  });
+			}
+		}
+	},
+	template: `
+  <modal v-if="showModal" @close="showModal = false">
+   <template v-slot:body>
+      <h3>Thank you for your message.</h3>
+    </template>
+    <template v-slot:header>
+      <h3>Your message has been send.</h3>
+    </template>
+  </modal>
+		<div id="Contact"><h2 v-if="contactsize">Contact</h2><h4 v-else>Contact</h4></div>
+        <div class="row">
+    		<div class="col">
+      			<input type="text" class="form-control" v-model="firstname" v-bind:class="{ errorborder: this.firstnameerror }" v-bind:placeholder="firstnameerror ? 'Firstname is required': 'First name'">
+    		</div>
+    		<div class="col">
+      			<input type="text" class="form-control" v-model="lastname" v-bind:class="{ errorborder: this.lastnameerror }" v-bind:placeholder="lastnameerror ? 'Last name is required': 'Last name'">
+    		</div>
+  		</div>
+  		<div class="row">
+  		<div class="col">
+      		<input type="text" class="form-control" v-model="email" v-bind:class="{ errorborder: this.emailerror }" v-bind:placeholder="emailerror ? 'Email address is required': 'Email address'">
+    	</div>
+    	</div>
+    	<div class="row">
+  		<div class="col">
+      		<textarea class="form-control" rows='6' v-model="message" v-bind:class="{ errorborder: this.messageerror }" v-bind:placeholder="messageerror ? 'Message is required': 'Message'"></textarea>
+    	</div>
+    	</div>
+        <p class="lead">
+          <button class="btn btn-lg btn-secondary" v-on:click="sendmessage" v-bind:disabled="messagesend">Send message</button>
+        </p> <div class='errortext' v-if="firstnameerror">First name is required.</div>
+        <div class='errortext' v-if="lastnameerror">Last name is required.</div>
+        <div class='errortext' v-if="emailerror">A valid email address is required.</div>
+        <div class='errortext' v-if="messageerror">A valid message is required.</div>
+  		<br><br><br><br><br><br>
+	`
+})
+
+app.component('footert',{
+	props: ['title','id','currentpage'],
+	methods: {
+    	changepage: function(event) {
+	      	this.$emit('clicked',this.id)
+	      	router.push({name: this.title})
+    	}
+  	},
+	template: `
+	<div class="col"><a class="btn btn-mg btn-secondary" v-on:click="changepage"  v-bind:class="{ active: this.id == this.currentpage }">{{ title }}</a></div>
+	`
+})
+app.component('headert',{
+	props: ['title','id','currentpage'],
+	emits: ['clicked'],
+	methods: {
+    	changepage: function(event) {
+	      	this.$emit('clicked',this.id)
+	      	router.push({name: 'Home', hash: '#'+this.title })
+    	}
+  	},
+	template: `
+	<a class="nav-link btn" v-on:click="changepage"  v-bind:class="{ active: this.id == this.currentpage }">{{ title }}</a>
+	`
+})
+
+app.component('modal', {
+  template: `
+  <transition name="modal">
+    <div class="modal-mask">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <slot name="header">
+              default header
+            </slot>
+          </div>
+
+          <div class="modal-body">
+            <slot name="body">
+              default body
+            </slot>
+          </div>
+
+          <div class="modal-footer">
+            <slot name="footer">
+              <button class="modal-default-button" @click="$emit('close')">
+                OK
+              </button>
+            </slot>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+  `,
+})
+
+const routes = [
+  { path: '/', component: mainpage, name: 'Home', props:{projects:projects}},
+  { path: '/Projects', component: mainpage, name: 'Projects', props:{projects:projects}},
+  { path: '/Contact', component: mainpage, name: 'Contact', props:{projects:projects}},
+  { path: '/Termsandconditions', component: terms, name: 'Terms and conditions'},
+  { path: '/Privacystatement', component: privacy, name: 'Privacy policy'}
+]
+
+
+
+const router = VueRouter.createRouter({
+  // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
+  history: VueRouter.createWebHashHistory(),
+   mode: 'history',
+    scrollBehavior (to, from, savedPosition) {
+  if (to.hash) {
+  	goto = to.hash.substr(1)
+  	
+  	document.getElementById(goto).scrollIntoView();
+     //return {selector: to.hash}
+  }
+},
+  routes, // short for `routes: routes`
+})
+app.use(router)
+app.mount('#root')
+
+</script>
+<
+<!-- app -->
+<div id="app">
+  
+</div>
+</body>
+</html>
