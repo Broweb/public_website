@@ -1,0 +1,27 @@
+{
+  "short_name": "Broweb",
+  "name": "Broweb Webapplication development ",
+  "start_url": "/index.html",
+  "background_color": "#65b5f7",
+  "theme_color": "#fff",
+  "display": "standalone",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/images/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "src": "/images/maskable_icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -3,6 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Broweb</title>
+<meta name="description" content="Creating custom webapplication solutions.">
+<meta name="keywords" content="Programming, Vue, Bootstrap, jQuery, HTML, CSS, JavaScript">
+<meta name="author" content="Broweb">
+<meta name="theme-color" content="#fff">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/images/icon-192.png">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
 <style>
 a,
@@ -118,7 +125,7 @@ body {
 }
 
 .image{
-	max-width: 100%;
+
 }
 
 #Home,#Projects,#Contact,#terms, .privacy{
@@ -203,16 +210,17 @@ body {
 
 </style>
 
-<script src="https://unpkg.com/vue@3.0.5/dist/vue.global.prod.js"></script>
-<script src="https://unpkg.com/vue-router@4"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="includes/vue.global.prod.js"></script>
+<script src="includes/vue-router@4"></script>
+<script src="includes/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+<script src="includes/axios.min.js"></script>
+
 </head>
 <body class="text-center">
 	<div id='root' class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
 		<header class="navbar fixed-top masthead mb-auto justify-content-center">
           <h3 class="masthead-brand">Broweb</h3>
-          <nav class="nav nav-masthead navbar navbar-expand-lg">
+          <nav class="nav nav-masthead navbar navbar-expand-lg" id='headernav'>
             <headert
             	v-for="header in headers"
             	:title="header.title"
@@ -222,7 +230,8 @@ body {
             ></headert>
           </nav>
       </header>
-    <router-view></router-view> 
+      <div id='max_width'></div>
+    <router-view ></router-view> 
       <footer class="mastfoot mt-auto navbar fixed-bottom justify-content-center">
 		<div class="row gx-5 inner justify-content-center">
    		<footert 
@@ -241,19 +250,28 @@ body {
 
 const projectsconst= {
   props: ['title','image','info','link'],
+  data() {
+    return{
+      max_width: 0
+      
+    }
+  },
+  beforeMount() {
+    //console.log(this.max_width);
+    this.max_width = document.getElementById("max_width").clientWidth
+    //console.log(this.max_width);
+  },
   template: `
     <div class="blog-post">
-      <h4>{{ title }}</h4>
-      <div><img v-bind:src="'images/'+image" class="image" v-if="image"></div>
+      <h3>{{ title }}</h3>
+      <div><img v-bind:src="'generateImage.php?file_name='+image+'&max_width='+max_width" class="image" v-if="image" v-bind:alt="title"></div>
       <br>
       <div style="white-space: pre-line;">{{ info }}</div>
-      <div v-if="link"><a target='_blank' v-bind:href="link">More information</a></div>
+      <div v-if="link">More information about <a target='_blank' v-bind:href="link" rel="noopener">{{ title }}</a>.</div>
       <br><br>
     </div>
   `
 }
-
-
  
 
 
@@ -263,7 +281,8 @@ const mainpage ={
 	data() {
     return{
     	contactsize:null,
-    	introsize:null
+    	introsize:null,
+      scrollSpy:null
 	}
 		},
 	methods: {
@@ -271,29 +290,38 @@ const mainpage ={
       //is contact visable
       var el = document.getElementById('Contact');
       //if contact 3/4 of page, than increase font
-      startincrease = window.innerHeight/4*3;
-      if ((el.offsetTop-window.scrollY)<startincrease){
-      	this.contactsize=true;
-      }else{
-      	this.contactsize=false;
+      if (el != null){
+        startincrease = window.innerHeight/4*3;
+        if ((el.offsetTop-window.scrollY)<startincrease){
+        	this.contactsize=true;
+        }else{
+      	 this.contactsize=false;
+        }
       }
 		//is intro visable
-		var el = document.getElementById('intro');	 
-      if (el.offsetTop<window.scrollY){
-      	this.introsize=true;
+    if (el != null){
+  		var el = document.getElementById('intro');	 
+        if (el.offsetTop<window.scrollY){
+        	this.introsize=true;
+        }
+        else{
+        	this.introsize=false;
+        }
       }
-      else{
-      	this.introsize=false;
-      }
-    }
-  
+    }  
 },
 mounted(){
 	document.addEventListener('scroll',this.handleScroll);
+  this.scrollSpy = new bootstrap.ScrollSpy(document.body, {
+  target: '#headernav'
+})
+},
+  unmounted(){
+this.scrollSpy.dispose()
 },
 	template: `
-	<div id='Home'></div>
-    <main role="main" class="container main">  
+	<div id='Home'>
+    <main role="main" class="container main" id='Home'>  
         <div id='intro' class='intro'><h1 class="cover-heading"><a name="Home"></a>Broweb Webapplication development</h1>
         <p class="lead" v-bind:class="{ smallertext: introsize }">Creating custom webapplication solutions</p>
         </div>    
@@ -301,7 +329,7 @@ mounted(){
         <hr>
         <h2>Some of my Projects:</h2>
         <br><br>
-		<projectsconst
+		<projectsconst 
         	v-for="project in projects"
         	:key="project.id"
         	:title="project.title"
@@ -315,7 +343,7 @@ mounted(){
         	v-bind:contactsize="contactsize"
         ></contact>
     </main>
-    
+    </div>
 	`
 }
 
@@ -553,10 +581,8 @@ const app = Vue.createApp({
 		updatepagechange(id){
 			this.currentpage = id;
 		}
-
 	},
-	
-	 components: {'projects': projectsconst, 'mainpage': mainpage},
+ components: {'projects': projectsconst, 'mainpage': mainpage},
   data() {
     return {
       currentpage: 1,
@@ -576,11 +602,11 @@ const app = Vue.createApp({
 
 
 const projects =  [
-		{ id: 1, title: 'Broweb website', image: 'broweb.png',  info: "Created with Vue.js and Bootstrap.\n Router engine and dynamic event processing."},
+		{ id: 1, title: 'Broweb website', image: 'broweb.png',  info: "Created with Vue.js and Bootstrap.\n Router engine and dynamic event processing.", link: 'https://github.com/Broweb/public_website'},
         { id: 2, title: 'Project planning', image: 'planning.png', info: "Custom week project planning.\n Direct edit, Direct calculation, Full mobile version!\n Up until 6 deadlines for each member of a project.\n Register leave, sickness, study or other non work hours.\n Authentication by Cloud providers.\n Created with jQuery Mobile."},
         { id: 3, title: 'Small business ERP', image: 'erp.png', info: "Customer relatations, Planning, Resource maintenance and Billing in 1 webapplication.\n Full mobile version!\n Created with jQuery mobile."},
-        { id: 4, title: 'Sharepoint improvements: Mail2Merge', image: 'mail2merge.jpg', info: "Attach documents from SharePoint directly to your emails.\nChromium browser extension\n Created with jQuery.", link: 'https://www.broweb.nl/mail2merge'},
-        { id: 5, title: '3D website: Broelie.nl', image: 'broelie.png', info: "Created with Three.js", link: 'https://www.broelie.nl'}
+        { id: 4, title: 'Sharepoint improvements: Mail2Merge', image: 'mail2merge.png', info: "Attach documents from SharePoint directly to your emails.\nChromium browser extension\n Created with jQuery.", link: 'https://www.broweb.nl/mail2merge'},
+        { id: 5, title: "3D website: Broelie.nl", image: 'broelie.png', info: "Created with Three.js", link: 'https://www.broelie.nl'}
       ]
 
 app.component('contact', {
@@ -682,7 +708,7 @@ app.component('contact', {
         <div class='errortext' v-if="lastnameerror">Last name is required.</div>
         <div class='errortext' v-if="emailerror">A valid email address is required.</div>
         <div class='errortext' v-if="messageerror">A valid message is required.</div>
-  		<br><br><br><br><br><br>
+  		<br><br><br><br><br><br><br><br><br><br><br><br>
 	`
 })
 
@@ -690,6 +716,10 @@ app.component('footert',{
 	props: ['title','id','currentpage'],
 	methods: {
     	changepage: function(event) {
+         var dataSpyList = [].slice.call(document.querySelectorAll('.active'))
+dataSpyList.forEach(function (dataSpyEl) {
+  dataSpyEl.classList.remove("active");
+})
 	      	this.$emit('clicked',this.id)
 	      	router.push({name: this.title})
     	}
@@ -703,12 +733,17 @@ app.component('headert',{
 	emits: ['clicked'],
 	methods: {
     	changepage: function(event) {
+         var dataSpyList = [].slice.call(document.querySelectorAll('.active'))
+dataSpyList.forEach(function (dataSpyEl) {
+  dataSpyEl.classList.remove("active");
+})
 	      	this.$emit('clicked',this.id)
 	      	router.push({name: 'Home', hash: '#'+this.title })
+
     	}
   	},
 	template: `
-	<a class="nav-link btn" v-on:click="changepage"  v-bind:class="{ active: this.id == this.currentpage }">{{ title }}</a>
+	<a class="nav-link btn" v-on:click="changepage"  v-bind:class="{ active: this.id == this.currentpage }" v-bind:href="'#'+title">{{ title }}</a>
 	`
 })
 
@@ -746,8 +781,8 @@ app.component('modal', {
 })
 
 const routes = [
-  { path: '/', component: mainpage, name: 'Home', props:{projects:projects}},
-  { path: '/Projects', component: mainpage, name: 'Projects', props:{projects:projects}},
+  { path: '/', component: mainpage, name: 'Home', props:{projects:projects}, alias: '/Home'},
+   { path: '/Projects', component: mainpage, name: 'Projects', props:{projects:projects}},
   { path: '/Contact', component: mainpage, name: 'Contact', props:{projects:projects}},
   { path: '/Termsandconditions', component: terms, name: 'Terms and conditions'},
   { path: '/Privacystatement', component: privacy, name: 'Privacy policy'}
@@ -771,6 +806,20 @@ const router = VueRouter.createRouter({
 })
 app.use(router)
 app.mount('#root')
+
+if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js', {
+          scope: '/'
+        })
+        .then(registration => {
+          //console.log('SW registered with scope:', registration.scope);
+        })
+        .catch(err => {
+          console.error('Registration failed:', err);
+        });
+      });
+    }
 
 </script>
 <
